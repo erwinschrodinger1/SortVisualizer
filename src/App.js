@@ -1,25 +1,38 @@
-import logo from './logo.svg';
-import './App.css';
-
-function App() {
+import React, { useEffect, useState } from "react";
+import Graph from "./components/Graph";
+import useBubleSort from "./logics/bubleSort";
+import useRandomizer from "./logics/useRandomizer";
+export default function App() {
+  let { arrayOfLen } = useRandomizer();
+  let { sort } = useBubleSort();
+  const [sliderValue, setSliderValue] = useState(50);
+  const [array, setArray] = useState(arrayOfLen(sliderValue));
+  useEffect(
+    () => {
+      setArray(arrayOfLen(sliderValue));
+    }, // eslint-disable-next-line
+    [sliderValue]
+  );
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      <input
+        type="range"
+        defaultValue={50}
+        max={1000}
+        onChange={(e) => {
+          setSliderValue(e.target.value);
+        }}
+      />
+      <h1>{sliderValue}</h1>
+      <button
+        onClick={() => {
+          let temp = array;
+          sort(temp, setArray);
+        }}
+      >
+        Sort
+      </button>
+      <Graph array={array} />
+    </>
   );
 }
-
-export default App;
